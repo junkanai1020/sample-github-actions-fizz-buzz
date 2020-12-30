@@ -1,5 +1,8 @@
 name: Continuous Integration
-on: push
+on: [push, pull_request]
+
+env:
+  cache-version: v1
 
 jobs:
   unit-test:
@@ -34,9 +37,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.npm-cache.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ env.cache-version }}-${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ env.cache-version }}-${{ runner.os }}-node-
       - name: Install dependencies
         run: npm ci
       - name: Lint
